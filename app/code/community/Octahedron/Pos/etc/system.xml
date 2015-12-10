@@ -1,0 +1,63 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @category    Octahedron
+ * @package     Octahedron_Pos
+ * @author      andrew@octahedron.com.au
+ */
+-->
+<config>
+  <tabs>
+    <octahedron_pos translate="label">
+      <label>Octahedron</label>
+      <sort_order>1000</sort_order>
+    </octahedron_pos>
+  </tabs>
+  <sections>
+    <octahedron_pos translate="label" module="octahedron_pos">
+      <label>Point of Sale</label>
+      <tab>octahedron_pos</tab>
+      <sort_order>100</sort_order>
+      <show_in_default>1</show_in_default>
+      <show_in_website>1</show_in_website>
+      <show_in_store>1</show_in_store>
+      <groups>
+        <connection translate="label">
+          <label>Connection</label>
+          <frontend_type>text</frontend_type>
+          <sort_order>1</sort_order>
+          <show_in_default>1</show_in_default>
+          <show_in_website>1</show_in_website>
+          <show_in_store>1</show_in_store>
+          <fields>
+            <url translate="label">
+                <label>URL</label>
+                <frontend_type>text</frontend_type>
+                <sort_order>1</sort_order>
+                <show_in_default>1</show_in_default>
+                <show_in_website>1</show_in_website>
+                <show_in_store>1</show_in_store>
+            </url>
+            <client_id translate="label">
+                <label>Client ID</label>
+                <frontend_type>text</frontend_type>
+                <sort_order>2</sort_order>
+                <show_in_default>1</show_in_default>
+                <show_in_website>1</show_in_website>
+                <show_in_store>1</show_in_store>
+            </client_id>
+            <client_secret translate="label">
+                <label>Client Secret</label>
+                <frontend_type>text</frontend_type>
+                <sort_order>3</sort_order>
+                <show_in_default>1</show_in_default>
+                <show_in_website>1</show_in_website>
+                <show_in_store>1</show_in_store>
+                <backend_model>octahedron_pos/connection</backend_model>
+            </client_secret>
+          </fields>
+        </connection>
+      </groups>
+    </octahedron_pos>
+  </sections>
+</config>

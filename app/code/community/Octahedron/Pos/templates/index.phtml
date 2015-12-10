@@ -1,0 +1,45 @@
+<style>
+  #octahedron-pos-results {
+    margin-top: 1em;
+  }
+  #octahedron-pos-results dt {
+    float: left;
+    clear: both;
+  }
+  #octahedron-pos-results dt:after {
+    content: ':';
+  }
+  #octahedron-pos-results dd {
+    float: left;
+    margin-left: 1em;
+  }
+</style>
+
+<h1>Octahedron POS Sync</h1>
+
+<form id="octahedron-pos-form" method="post" action="<?php echo Mage::getModel('adminhtml/url')->getUrl('*/pos/sync') ?>">
+	<button type="submit" value="<?php echo $this->__('Perform Sync'); ?>" class="button">
+		<?php echo $this->__('Perform Sync'); ?>
+	</button>
+</form>
+
+<div id="octahedron-pos-results"></div>
+
+<script>
+  var $form = $('octahedron-pos-form');
+  var $results = $('octahedron-pos-results');
+	document.observe('dom:loaded', function() {
+		$form.observe('submit', function(e) {
+			e.stop();
+			$results.innerHTML = '';
+			new Ajax.Request($form.action, {
+			  method: $form.method,
+			  onSuccess: function(response) {
+				  $results.update('<dl>' + JSON.parse(response.responseText).reduce(function(html, section) {
+            return html + '<dt>' + section.key + '</dt><dd>' + section.count + '</dd>';
+          }, '') + '</dl>');
+			  }
+      });
+		});
+	});
+</script>

@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @category    Octahedron
+ * @package     Octahedron_Pos
+ * @author      andrew@octahedron.com.au
+ */
+-->
+<config>
+    <modules>
+        <Octahedron_Pos>
+            <active>true</active>
+            <codePool>community</codePool>
+        </Octahedron_Pos>
+    </modules>
+</config>

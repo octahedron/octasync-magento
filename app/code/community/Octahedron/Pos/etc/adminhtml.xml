@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @category    Octahedron
+ * @package     Octahedron_Pos
+ * @author      andrew@octahedron.com.au
+ */
+-->
+<config>
+  <menu>
+    <octahedron translate="title" module="octahedron_pos">
+      <title>Octahedron</title>
+      <sort_order>9999</sort_order>
+      <children>
+        <sync>
+          <title>Sync</title>
+          <sort_order>1</sort_order>
+          <action>adminhtml/pos/index</action>
+        </sync>
+      </children>
+    </octahedron>
+  </menu>
+  <acl>
+    <resources>
+      <admin>
+        <children>
+          <system>
+            <children>
+              <config>
+                <children>
+                  <octahedron_pos translate="title" module="octahedron_pos">
+                    <title>Octahedron Section</title>
+                  </octahedron_pos>
+                </children>
+              </config>
+            </children>
+          </system>
+          <octahedron translate="title" module="octahedron_pos">
+            <title>Octahedron</title>
+            <sort_order>1</sort_order>
+            <children>
+              <sync>
+                <title>Sync</title>
+              </sync>
+            </children>
+          </octahedron>
+        </children>
+      </admin>
+    </resources>
+  </acl>
+</config>

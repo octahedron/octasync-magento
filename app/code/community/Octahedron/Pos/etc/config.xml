@@ -1,0 +1,109 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @category    Octahedron
+ * @package     Octahedron_Pos
+ * @author      andrew@octahedron.com.au
+ */
+-->
+<config>
+  <modules>
+    <Octahedron_Pos>
+      <version>0.1.0</version>
+    </Octahedron_Pos>
+  </modules>
+
+  <global>
+    <resources>
+      <octahedron_pos_setup>
+        <setup>
+          <module>Octahedron_Pos</module>
+        </setup>
+      </octahedron_pos_setup>
+    </resources>
+
+    <blocks>
+      <octahedron_pos>
+        <class>Octahedron_Pos_Block</class>
+      </octahedron_pos>
+    </blocks>
+
+    <models>
+      <octahedron_pos>
+        <class>Octahedron_Pos_Model</class>
+      </octahedron_pos>
+    </models>
+
+    <helpers>
+      <octahedron_pos>
+        <class>Octahedron_Pos_Helper</class>
+      </octahedron_pos>
+    </helpers>
+
+    <events>
+      <controller_front_init_before>
+        <observers>
+          <octahedron_pos_lib_load>
+            <type>singleton</type>
+            <class>octahedron_pos/loader</class>
+            <method>controllerFrontInitBefore</method>
+          </octahedron_pos_lib_load>
+        </observers>
+      </controller_front_init_before>
+
+      <sales_order_place_after>
+        <observers>
+          <octahedron_pos_order_create>
+            <type>singleton</type>
+            <class>Octahedron_Pos_Model_Sale</class>
+            <method>createRemoteSale</method>
+          </octahedron_pos_order_create>
+        </observers>
+      </sales_order_place_after>
+
+      <customer_register_success>
+        <observers>
+          <octahedron_pos_customer_create>
+            <type>singleton</type>
+            <class>Octahedron_Pos_Model_Customer</class>
+            <method>createRemoteCustomer</method>
+          </octahedron_pos_customer_create>
+        </observers>
+      </customer_register_success>
+
+      <customer_address_save_after>
+        <observers>
+          <octahedron_pos_customer_save>
+            <type>singleton</type>
+            <class>Octahedron_Pos_Model_Customer</class>
+            <method>updateRemoteCustomer</method>
+          </octahedron_pos_customer_save>
+        </observers>
+      </customer_address_save_after>
+    </events>
+  </global>
+
+  <admin>
+    <routers>
+      <adminhtml>
+        <args>
+          <modules>
+            <Octahedron_Pos after="Mage_Adminhtml">Octahedron_Pos</Octahedron_Pos>
+          </modules>
+        </args>
+      </adminhtml>
+    </routers>
+  </admin>
+
+  <frontend>
+    <routers>
+      <octahedron_pos>
+        <use>standard</use>
+        <args>
+          <module>Octahedron_Pos</module>
+          <frontName>pos</frontName>
+        </args>
+      </octahedron_pos>
+    </routers>
+  </frontend>
+</config>
