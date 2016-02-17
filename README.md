@@ -5,7 +5,7 @@ A Magento extension for integrating with Octahedron ERP software.
 Download the latest version and merge with your Magento installation.
 
 ## Configuration
-In your Octahedron ERP application, navigate to **Utilities** > **Other** > **Applications** and create and new application.
+In your Octahedron ERP application, navigate to **Utilities** > **Other** > **Applications** and create a new application.
 
 **Note: the generated client ID and secret will be used to integrate Magento with your ERP software.**
 
