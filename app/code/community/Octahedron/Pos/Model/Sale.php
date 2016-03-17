@@ -42,7 +42,7 @@ class Octahedron_Pos_Model_Sale {
         ];
       }
       $items = array_map(function($item) {
-        return ['stockNumber' => $item->getSku(), 'qty' => $item->getQtyOrdered(), 'price' => $item->getPriceInclTax()];
+        return ['stockNumber' => $item->getSku(), 'qty' => $item->getQtyOrdered(), 'price' => $item->getBasePriceInclTax()];
       }, $order->getAllItems());
       if ($order->getShippingAmount() > 0) {
         $items[] = ['nonStockDescription' => 'Shipping', 'qty' => 1, 'price' => $order->getShippingAmount()];
