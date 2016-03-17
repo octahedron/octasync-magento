@@ -93,7 +93,8 @@ class Octahedron_Pos_WebhooksController extends Mage_Core_Controller_Front_Actio
   }
 
   protected function addCategory($categoryName) {
-    Mage::getSingleton('octahedron_pos/category')->addCategory($categoryName);
+    $categoryModel = Mage::getSingleton('octahedron_pos/category');
+    $categoryModel->addCategory($categoryName);
     $categoryModel->updateCategoryCount();
   }
 
