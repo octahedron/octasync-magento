@@ -20,7 +20,8 @@ class Octahedron_Pos_Helper_Meta {
   }
 
   public function getEntityMeta($code) {
-    return $this->dbRead->fetchRow("SELECT * FROM eav_entity_type WHERE entity_type_code = '{$code}'");
+    $entityTypeTable = $this->resource->getTableName('eav/entity_type');
+    return $this->dbRead->fetchRow("SELECT * FROM {$entityTypeTable} WHERE entity_type_code = '{$code}'");
   }
 
   public function getAttributesMap($entityTypeId) {

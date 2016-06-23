@@ -98,6 +98,7 @@ class Octahedron_Pos_Helper_Sync extends Mage_Core_Helper_Abstract {
     $page = 1;
     do {
       $stock = $this->api->stock($page++);
+      $pagination = $stock['pagination'];
       foreach ($stock['_embedded']['stock'] as $item) {
         if (isset($currentStock[$item['stock_number']])) {
           $updatedStock += $this->updateStock($item, $currentStock[$item['stock_number']], $stockModel);
@@ -109,7 +110,7 @@ class Octahedron_Pos_Helper_Sync extends Mage_Core_Helper_Abstract {
         }
       }
     }
-    while ($stock['end'] < $stock['total']);
+    while ($pagination['end'] < $pagination['total']);
 
     if ($currentStock) {
       $deletedStock = count($currentStock);
