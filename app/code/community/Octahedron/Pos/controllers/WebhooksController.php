@@ -102,7 +102,6 @@ class Octahedron_Pos_WebhooksController extends Mage_Core_Controller_Front_Actio
     $category = Mage::getModel('catalog/category')->loadByAttribute('name', $categoryDetails['category']);
     if (!$category) throw new Exception('Invalid category', 500);
     Mage::getSingleton('octahedron_pos/category')->mergeCategory($category, $categoryDetails['mergedFrom']);
-    $categoryModel->updateRootCategory();
   }
 
 }

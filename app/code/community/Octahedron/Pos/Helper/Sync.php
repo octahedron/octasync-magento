@@ -65,7 +65,6 @@ class Octahedron_Pos_Helper_Sync extends Mage_Core_Helper_Abstract {
     $status[] = ['key' => 'New Categories', 'count' => count($newCategories)];
 
     if ($deletedCategories || $newCategories) $categoryModel->updateCategoryCount();
-    $categoryModel->updateRootCategory();
   }
 
   protected function syncTaxValues(&$status, $lastSync) {

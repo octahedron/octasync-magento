@@ -108,6 +108,14 @@ function addPosSaleIdAttributeToOrders() {
   ));
 }
 
+function addOctahedronRootCategory() {
+  Mage::log("Adding Swim root category", Zend_Log::INFO);
+
+  $categoryModel = Mage::getSingleton('octahedron_pos/category');
+  Mage::getConfig()->saveConfig('octahedron_pos/category/root', $categoryModel->addCategory('Swim', true));
+  $categoryModel->updateCategoryCount(true);
+}
+
 $productModel = Mage::getModel('catalog/product');
 $defaultAttributeSet = Mage::getModel('eav/entity_attribute_set');
 $defaultAttributeSet->load($productModel->getResource()->getEntityType()->getDefaultAttributeSetId());
@@ -151,5 +159,6 @@ createAttributeSetWithGroup('Pearl', $defaultAttributeSet->getId(), $entityTypeI
 ));
 
 addPosSaleIdAttributeToOrders();
+addOctahedronRootCategory();
 
 $this->endSetup();
