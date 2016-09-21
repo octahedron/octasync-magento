@@ -37,24 +37,27 @@ class Octahedron_Pos_Model_Customer {
     if (Mage::registry('Update Remote Customer')) return;
     try {
       $customer = $observer->getEvent()->getCustomerAddress()->getCustomer();
-      $address = $customer->getPrimaryBillingAddress();
-      $street = $address->getStreet();
-      Mage::log('Updating external customer #' . $customer->getId(), Zend_Log::INFO);
-      $remoteCustomer = $this->api->saveCustomer([
+      $updates = [
         'id' => $customer->getId(),
         'firstName' => $customer->getFirstname(),
         'lastName' => $customer->getLastname(),
         'email' => $customer->getEmail(),
-        'isActive' => true,
-        'homePhone' => $address->getTelephone(),
-        'faxPhoneNumber' => $address->getFax(),
-        'street' => $street[0],
-        'suburb' => count($street) > 1 ? $street[1] : null,
-        'city' => $address->getCity(),
-        'state' => $address->getRegion(),
-        'postcode' => $address->getPostcode(),
-        'country' => $address->getCountry()
-      ]);
+        'isActive' => true
+      ];
+      $address = $customer->getPrimaryBillingAddress();
+      if ($address) {
+        $street = $address->getStreet();
+        $updates['homePhone'] = $address->getTelephone();
+        $updates['faxPhoneNumber' => $address->getFax();
+        $updates['street' => $street[0];
+        $updates['suburb' => count($street) > 1 ? $street[1] : null;
+        $updates['city' => $address->getCity();
+        $updates['state' => $address->getRegion();
+        $updates['postcode' => $address->getPostcode();
+        $updates['country' => $address->getCountry();
+      }
+      Mage::log('Updating external customer #' . $customer->getId(), Zend_Log::INFO);
+      $remoteCustomer = $this->api->saveCustomer($updates);
       Mage::log('Updated external customer #' . $customer->getId(), Zend_Log::INFO);
     }
     catch (Exception $e) {
