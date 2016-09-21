@@ -53,7 +53,7 @@ END;
     $entityId = (int)$this->dbRead->fetchOne("SELECT AUTO_INCREMENT FROM information_schema.tables WHERE table_name = '" . $this->categoriesTable . "' AND table_schema = DATABASE()");
     $query = <<<END
         INSERT INTO {$this->categoriesTable} (entity_type_id, attribute_set_id, parent_id, created_at, updated_at, path, position, level, children_count)
-        VALUES (:entityTypeId, :attributeSetId, :parentId, now(), now(), :path, :position, 1, 0)
+        VALUES (:entityTypeId, :attributeSetId, :parentId, now(), now(), :path, :position, 2, 0)
 END;
     $path = $atRootLevel ? '1/' . $entityId : "1/{$this->rootCategoryId}/{$entityId}";
     $parentId = $atRootLevel ? 1 : $this->rootCategoryId;
