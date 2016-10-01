@@ -26,7 +26,6 @@ class Octahedron_Pos_Helper_Sync extends Mage_Core_Helper_Abstract {
       $lastSync = Mage::getStoreConfig('octahedron_pos/api/last_sync');
       $status = [];
       $this->syncCategories($status, $lastSync);
-      $this->syncTaxValues($status, $lastSync);
       $this->syncStock($status, $lastSync);
       $this->dbWrite->commit();
     }
@@ -65,27 +64,6 @@ class Octahedron_Pos_Helper_Sync extends Mage_Core_Helper_Abstract {
     $status[] = ['key' => 'New Categories', 'count' => count($newCategories)];
 
     if ($deletedCategories || $newCategories) $categoryModel->updateCategoryCount();
-  }
-
-  protected function syncTaxValues(&$status, $lastSync) {
-    $taxModel = Mage::getSingleton('octahedron_pos/tax');
-    if (!$lastSync) $taxModel->clearTaxes();
-
-    $currentTaxRates = $taxModel->currentTaxRates();
-    $serverTaxValues = $this->api->taxValues();
-    $deletedTaxValues = array_diff(array_keys($currentTaxRates), array_keys($serverTaxValues));
-    if ($deletedTaxValues) {
-      foreach ($deletedTaxValues as $deletedTaxValue) $taxModel->deleteTax($deletedTaxValue);
-    }
-    $status[] = ['key' => 'Deleted Tax Values', 'count' => count($deletedTaxValues)];
-
-    $newTaxValues = array_diff(array_keys($serverTaxValues), array_keys($currentTaxRates));
-    if ($newTaxValues) {
-      foreach ($newTaxValues as $newTaxValue) {
-        $taxModel->addTax($newTaxValue, $serverTaxValues[$newTaxValue]['value'], $serverTaxValues[$newTaxValue]['country_code']);
-      }
-    }
-    $status[] = ['key' => 'New Tax Values', 'count' => count($newTaxValues)];
   }
 
   protected function syncStock(&$status) {

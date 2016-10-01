@@ -65,14 +65,6 @@ class Octahedron_Pos_Helper_Api extends AbstractProvider {
     }, []);
   }
 
-  public function taxValues() {
-    $response = $this->fetchData($this->url . '/tax');
-    return array_reduce($response['taxValues'], function($taxValues, $row) {
-      if ($row['value'] !== 1) $taxValues[$row['tax']] = $row;
-      return $taxValues;
-    }, []);
-  }
-
   public function createSale(array $items, array $payments, $customer) {
     $data = [
       'items' => $items,

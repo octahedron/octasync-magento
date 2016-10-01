@@ -23,8 +23,6 @@ class Octahedron_Pos_WebhooksController extends Mage_Core_Controller_Front_Actio
         case 'stock_update': $this->updateStockItem($event['data']['stockNumber']); break;
         case 'stock_create': $this->addStockItem($event['data']['stockNumber']); break;
         case 'stock_delete': $this->deleteStockItem($event['data']['stockNumber']); break;
-        case 'tax_create': $this->addTax($event['data']); break;
-        case 'tax_delete': $this->deleteTax($event['data']['tax']); break;
         case 'category_update': $this->updateCategory($event['data']); break;
         case 'category_create': $this->addCategory($event['data']['category']); break;
         case 'category_merge': $this->mergeCategory($event['data']); break;
@@ -76,14 +74,6 @@ class Octahedron_Pos_WebhooksController extends Mage_Core_Controller_Front_Actio
     $product = Mage::getModel('catalog/product')->loadByAttribute('sku', $stockNumber);
     if (!$product) throw new Exception('Invalid stock item', 500);
     Mage::getSingleton('octahedron_pos/stock')->deleteStockItem($product);
-  }
-
-  protected function addTax($taxDetails) {
-    Mage::getSingleton('octahedron_pos/stock')->addTax($taxDetails['tax'], $taxDetails['value'], $taxDetails['countryCode']);
-  }
-
-  protected function deleteTax($tax) {
-    Mage::getSingleton('octahedron_pos/stock')->deleteTax($tax);
   }
 
   protected function updateCategory($categoryDetails) {
