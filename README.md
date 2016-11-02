@@ -11,7 +11,7 @@ In your Octahedron ERP application, navigate to **Utilities** > **Other** > **Ap
 
 **Note: the generated client ID and secret will be used to integrate Magento with your ERP software.**
 
-While there, edit the webhook configuration for the new application and add your Magento webhook URL (e.g. *http://<i></i>yourmagentosite.com/pos/webhooks*). Also, subscribe to the  **Stock Change**, **Tax Change**, and **Category Change** events.
+The plugin adds a new controller and action to your Magento site to accept webhook pushes and is accessible via a `POST` request to `/pos/webhooks`. To let your Octahedron ERP application know of the end point, edit the webhook configuration for the new application and add your full Magento webhook URL (e.g. *http://<i></i>yourmagentosite.com/pos/webhooks*). Also, subscribe to the  **Stock Change**, **Stock Picture Change**, and **Category Change** events.
 
 In your Magento admin site, navigate to **System** > **Configuration** > **Point of Sale** and enter the address of your Octahedron ERP (e.g. *yourcompany.onswim.com*).  Copy and paste the client ID and secret from above into the respective fields and hit save.  A success message will pop up if the connection was successful otherwise ensure all the fields have been entered correctly.
 
