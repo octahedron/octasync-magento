@@ -7,13 +7,13 @@ class Octahedron_Pos_WebhooksController extends Mage_Core_Controller_Front_Actio
   protected $api;
 
   public function indexAction() {
-    $this->api = Mage::helper('octahedron_pos/api');
     $request = $this->getRequest();
     if (!$request->isPost() || !($event = $this->getData($request))) {
       $this->norouteAction();
       return;
     }
 
+    $this->api = Mage::helper('octahedron_pos/api');
     Mage::app()->setCurrentStore(Mage_Core_Model_App::ADMIN_STORE_ID);
 
     $dbWrite = Mage::getSingleton('core/resource')->getConnection('core_write');
@@ -23,6 +23,9 @@ class Octahedron_Pos_WebhooksController extends Mage_Core_Controller_Front_Actio
         case 'stock_update': $this->updateStockItem($event['data']['stockNumber']); break;
         case 'stock_create': $this->addStockItem($event['data']['stockNumber']); break;
         case 'stock_delete': $this->deleteStockItem($event['data']['stockNumber']); break;
+        case 'stock_picture_update': $this->updateStockPicture($event['data']); break;
+        case 'stock_picture_create': $this->addStockPicture($event['data']); break;
+        case 'stock_picture_delete': $this->deleteStockPicture($event['data']); break;
         case 'category_update': $this->updateCategory($event['data']); break;
         case 'category_create': $this->addCategory($event['data']['category']); break;
         case 'category_merge': $this->mergeCategory($event['data']); break;
@@ -47,6 +50,24 @@ class Octahedron_Pos_WebhooksController extends Mage_Core_Controller_Front_Actio
     if (strstr($contentType, 'application/json')) return Zend_Json::decode($rawBody);
     if (strstr($contentType, 'application/xml')) return (new Zend_Config_Xml($rawBody))->toArray();
     return false;
+  }
+
+  protected function addStockPicture($data) {
+    $product = Mage::getModel('catalog/product')->loadByAttribute('sku', $data['stockNumber']);
+    if (!$product) throw new Exception('Invalid stock item', 500);
+    Mage::getSingleton('octahedron_pos/picture')->addStockPicture($product, $this->api->imageUris($data['path']));
+  }
+
+  protected function updateStockPicture($data) {
+    $product = Mage::getModel('catalog/product')->loadByAttribute('sku', $data['stockNumber']);
+    if (!$product) throw new Exception('Invalid stock item', 500);
+    Mage::getSingleton('octahedron_pos/picture')->updateStockPicture($product, $data['path']);
+  }
+
+  protected function deleteStockPicture($data) {
+    $product = Mage::getModel('catalog/product')->loadByAttribute('sku', $data['stockNumber']);
+    if (!$product) throw new Exception('Invalid stock item', 500);
+    Mage::getSingleton('octahedron_pos/picture')->deleteStockPicture($product, $data['path']);
   }
 
   protected function updateStockItem($stockNumber) {

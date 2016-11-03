@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Pos StockItem
+ * Pos Stock
  *
  * @category    Octahedron
  * @package     Octahedron_Pos

@@ -31,6 +31,13 @@ class Octahedron_Pos_Helper_Api extends AbstractProvider {
     $this->cache = Mage::app()->getCache();
   }
 
+  public function imageUris($path) {
+    return [
+      'base' => $this->url . '/stock_images/' . $path,
+      'small' => $this->url . '/client/images/stock/thumbnails/large/' . $path . '.png'
+    ];
+  }
+
   public function getAccessToken($grant = 'client-credentials', $params = []) {
     $token = unserialize($this->cache->load(self::TOKEN_KEY));
     if (!$token) {
