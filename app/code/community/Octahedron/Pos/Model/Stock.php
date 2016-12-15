@@ -181,10 +181,12 @@ END;
       $this->meta->insertEntry($this->productsTable, 'varchar', $attributesMap['clasp'], $entityTypeId, $entityId, $item['pearl_clasp']);
       $this->meta->insertEntry($this->productsTable, 'decimal', $attributesMap['number_of_pearls'], $entityTypeId, $entityId, $item['pearl_no_pearls']);
     }
+    Mage::log('Added Product ' . $item['stock_number'], Zend_Log::INFO);
   }
 
-  public function deleteStockItem($stockItem) {
-    $stockItem->delete();
+  public function deleteStockItem($product) {
+    $product->delete();
+    Mage::log('Deleted Product ' . $product->getSku(), Zend_Log::INFO);
   }
 
 }

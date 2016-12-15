@@ -61,6 +61,7 @@ class Octahedron_Pos_Helper_Api extends AbstractProvider {
   public function stock($page = 1, $stockNumber = false) {
     $url = $this->url . '/stock?_limit=1000&_order=stockNumber&_dir=asc&_page=' . $page;
     if ($stockNumber) $url .= '&stockNumber=' . $stockNumber;
+    else $url .= '&location=anyInStock';
     return $this->fetchData($url);
   }
 

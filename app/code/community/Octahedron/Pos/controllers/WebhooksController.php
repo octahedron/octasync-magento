@@ -70,6 +70,7 @@ class Octahedron_Pos_WebhooksController extends Mage_Core_Controller_Front_Actio
     Mage::getSingleton('octahedron_pos/picture')->deleteStockPicture($product, $data['path']);
   }
 
+  // this can also add/delete stock items if the updated location is in-stock/out-of-stock respectively
   protected function updateStockItem($stockNumber) {
     if (!preg_match('/^[A-Z]\d+$/', $stockNumber)) {
       throw new Exception('Invalid stock number', 400);
@@ -77,11 +78,16 @@ class Octahedron_Pos_WebhooksController extends Mage_Core_Controller_Front_Actio
     $results = $this->api->stock(1, $stockNumber);
     $remoteStockDetails = array_pop($results['_embedded']['stock']);
     if (!$remoteStockDetails) throw new Exception('Invalid stock item', 500);
+
     $localProduct = Mage::getModel('catalog/product')->loadByAttribute('sku', $stockNumber);
-    if (strtotime($remoteStockDetails['date_modified']) > strtotime($localProduct->getUpdatedAt())) {
-      Mage::getSingleton('octahedron_pos/stock')->updateStockItem($localProduct, $remoteStockDetails);
+    if ($remoteStockDetails['is_in_stock']) {
+      if (!$localProduct) Mage::getSingleton('octahedron_pos/stock')->addStockItem($remoteStockDetails);
+      else if (strtotime($remoteStockDetails['date_modified']) > strtotime($localProduct->getUpdatedAt())) {
+        Mage::getSingleton('octahedron_pos/stock')->updateStockItem($localProduct, $remoteStockDetails);
+      }
+      else Mage::log('Product Update Skipped (modified time older than local): ' . $localProduct->getSku(), Zend_Log::INFO);
     }
-    else Mage::log('Product Update Skipped (modified time older than local): ' . $localProduct->getSku(), Zend_Log::INFO);
+    else if ($localProduct) Mage::getSingleton('octahedron_pos/stock')->deleteStockItem($localProduct);
   }
 
   protected function addStockItem($stockNumber) {
