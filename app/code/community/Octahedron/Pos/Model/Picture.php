@@ -12,13 +12,22 @@ class Octahedron_Pos_Model_Picture {
   public function addStockPicture($localProduct, $imageUris) {
     $this->savePictureLocally($localProduct, $imageUris['base'], 'image');
     $this->savePictureLocally($localProduct, $imageUris['small'], 'small_image');
-    $localProduct->save();
   }
 
   protected function savePictureLocally($localProduct, $url, $type) {
+    Mage::log('Saving Image for ' . $localProduct->getSku(), Zend_Log::INFO);
     $path = Mage::getBaseDir('media') . '/import/'. basename($url);
     copy($url, $path);
-    if (file_exists($path)) $localProduct->addImageToMediaGallery($path, $type, true, $type === 'small_image');
+    if (file_exists($path)) {
+      if (!$localProduct->getMediaGallery()) {
+        $localProduct->setMediaGallery(array('images' => array(), 'values' => array()));
+      }
+      $localProduct->addImageToMediaGallery($path, $type, true, $type === 'small_image');
+      $localProduct->save();
+      Mage::log('Successfully copied ' . $url . ' to ' . $path, Zend_Log::INFO);
+    }
+    else Mage::log('Failed copying ' . $url . ' to ' . $path, Zend_Log::INFO);
+    Mage::log('End Saving Image for ' . $localProduct->getSku(), Zend_Log::INFO);
   }
 
   public function updateStockPicture($localProduct, $path) {
