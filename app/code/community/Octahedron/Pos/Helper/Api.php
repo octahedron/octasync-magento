@@ -73,6 +73,22 @@ class Octahedron_Pos_Helper_Api extends AbstractProvider {
     }, []);
   }
 
+  public function paymentTypes() {
+    $response = $this->fetchData($this->url . '/payment-types');
+    return array_map(function($paymentType) {
+      return $paymentType['name'];
+    }, $response['paymentTypes']);
+  }
+
+  public function addPaymentTypes(array $paymentTypes) {
+    $names = array_map(function($paymentType) {
+      return $paymentType['name'];
+    }, $paymentTypes);
+    Mage::log('Adding missing payment types ' . implode(', ', $names), Zend_Log::INFO);
+    $this->postData($this->url . '/payment-types', json_encode(['paymentTypes' => $paymentTypes]), false);
+    Mage::log('Added missing payment types', Zend_Log::INFO);
+  }
+
   public function createSale(array $items, array $payments, $customer) {
     $data = [
       'items' => $items,
@@ -86,21 +102,22 @@ class Octahedron_Pos_Helper_Api extends AbstractProvider {
     return $this->postData($this->url . '/customers', json_encode($customer));
   }
 
-  protected function postData($url, $data) {
+  protected function postData($url, $data, $parseResponse = true) {
     try {
       $client = $this->getHttpClient();
       $headers = $this->getDefaultHeaders($this->getAccessToken());
       $headers['Content-Type'] = 'application/json';
       $request = $client->post($url, $headers, $data)->send();
-      Mage::log('Post response: ' . $request->getBody(), Zend_Log::DEBUG);
-      $response = json_decode($request->getBody(), true);
+      if ($parseResponse) {
+        Mage::log('Post response: ' . $request->getBody(), Zend_Log::DEBUG);
+        return json_decode($request->getBody(), true);
+      }
     }
     catch (BadResponseException $e) {
       $response = $e->getResponse()->getBody();
       $result = $this->prepareResponse($response);
       throw new IDPException($result);
     }
-    return $response;
   }
 
   public function getDefaultHeaders($token = null) {

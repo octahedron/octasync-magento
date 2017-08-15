@@ -16,7 +16,7 @@ class Octahedron_Pos_Model_Sale {
   }
 
   protected function getPaymentType($payment) {
-    if ($payment->getMethod() === 'ccsave') {
+    if ($payment->getMethod() === 'ccsave' || substr($payment->getMethod(), 0, 4) === 'eway') {
       switch ($payment->getCcType()) {
         case 'VI': return 'Visa';
         case 'MC': return 'Mastercard';
@@ -24,7 +24,10 @@ class Octahedron_Pos_Model_Sale {
         case 'DI': return 'Diners';
       }
     }
-    return 'Cheque';
+    else if (substr($payment->getMethod(), 0, 6) === 'paypal') return 'Paypal';
+    else if ($payment->getMethod() === 'banktransfer') return 'Bank Transfer';
+    else if ($payment->getMethod() === 'checkmo') return 'Cheque';
+    return 'Other';
   }
 
   public function createRemoteSale(Varien_Event_Observer $observer) {

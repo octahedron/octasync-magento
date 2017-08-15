@@ -25,6 +25,7 @@ class Octahedron_Pos_Helper_Sync extends Mage_Core_Helper_Abstract {
       $this->disableAutoIndex();
       $lastSync = Mage::getStoreConfig('octahedron_pos/api/last_sync');
       $status = [];
+      $this->syncPaymentTypes($status, $lastSync);
       $this->syncCategories($status, $lastSync);
       $this->syncStock($status, $lastSync);
       $this->dbWrite->commit();
@@ -44,6 +45,25 @@ class Octahedron_Pos_Helper_Sync extends Mage_Core_Helper_Abstract {
     foreach ($processCollection as $process) {
       $process->setMode(Mage_Index_Model_Process::MODE_MANUAL)->save();
     }
+  }
+
+  protected function syncPaymentTypes(&$status) {
+    $serverPaymentTypes = $this->api->paymentTypes();
+    $missingPaymentTypes = [];
+    if (!in_array('Paypal', $serverPaymentTypes)) {
+      $missingPaymentTypes[] = ['name' => 'Paypal', 'transactionType' => 'Electronic'];
+    }
+    if (!in_array('Cheque', $serverPaymentTypes)) {
+      $missingPaymentTypes[] = ['name' => 'Cheque', 'transactionType' => 'Manual'];
+    }
+    if (!in_array('Bank Transfer', $serverPaymentTypes)) {
+      $missingPaymentTypes[] = ['name' => 'Bank Transfer', 'transactionType' => 'Electronic'];
+    }
+    if (!in_array('Other', $serverPaymentTypes)) {
+      $missingPaymentTypes[] = ['name' => 'Other', 'transactionType' => 'Other'];
+    }
+    $this->api->addPaymentTypes($missingPaymentTypes);
+    $status[] = ['key' => 'Sent Payment Types', 'count' => count($missingPaymentTypes)];
   }
 
   protected function syncCategories(&$status) {
