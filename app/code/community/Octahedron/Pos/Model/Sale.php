@@ -44,8 +44,13 @@ class Octahedron_Pos_Model_Sale {
           'sex' => $order->getCustomerGender()
         ];
       }
-      $items = array_map(function($item) {
-        return ['stockNumber' => $item->getSku(), 'qty' => $item->getQtyOrdered(), 'price' => $item->getBasePriceInclTax()];
+      $items = array_map(function($itemModel) {
+        $item = [
+          'stockNumber' => $itemModel->getSku(),
+          'qty' => $itemModel->getQtyOrdered(),
+          'price' => $itemModel->getBasePriceInclTax() - $itemModel->getDiscountAmount()
+        ];
+        return $item;
       }, $order->getAllItems());
       if ($order->getShippingAmount() > 0) {
         $items[] = ['nonStockDescription' => 'Shipping', 'qty' => 1, 'price' => $order->getShippingAmount()];
