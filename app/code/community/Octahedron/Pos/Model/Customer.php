@@ -48,13 +48,13 @@ class Octahedron_Pos_Model_Customer {
       if ($address) {
         $street = $address->getStreet();
         $updates['homePhone'] = $address->getTelephone();
-        $updates['faxPhoneNumber' => $address->getFax();
-        $updates['street' => $street[0];
-        $updates['suburb' => count($street) > 1 ? $street[1] : null;
-        $updates['city' => $address->getCity();
-        $updates['state' => $address->getRegion();
-        $updates['postcode' => $address->getPostcode();
-        $updates['country' => $address->getCountry();
+        $updates['faxPhoneNumber'] = $address->getFax();
+        $updates['street'] = $street[0];
+        $updates['suburb'] = count($street) > 1 ? $street[1] : null;
+        $updates['city'] = $address->getCity();
+        $updates['state'] = $address->getRegion();
+        $updates['postcode'] = $address->getPostcode();
+        $updates['country'] = $address->getCountry();
       }
       Mage::log('Updating external customer #' . $customer->getId(), Zend_Log::INFO);
       $remoteCustomer = $this->api->saveCustomer($updates);
