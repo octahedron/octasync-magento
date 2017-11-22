@@ -33,6 +33,7 @@ class Octahedron_Pos_Model_Sale {
   public function createRemoteSale(Varien_Event_Observer $observer) {
     try {
       $order = $observer->getEvent()->getOrder();
+      // $address = $order->getBillingAddress()->getData();
       $customer = null;
       if (!$order->getCustomerIsGuest()) {
         $customer = [

@@ -39,9 +39,14 @@ class Octahedron_Pos_Model_Picture {
   public function deleteStockPicture($localProduct, $path) {
     $id = $localProduct->getId();
     $mediaApi = Mage::getModel('catalog/product_attribute_media_api');
-    $mediaApi->remove($id, "/{$path{0}}/{$path{1}}/{$path}");
-    $mediaApi->remove($id, "/{$path{0}}/{$path{1}}/{$path}.png");
-    // $localProduct->save();
+    try {
+      $mediaApi->remove($id, "/{$path{0}}/{$path{1}}/{$path}");
+    }
+    catch (Exception $e) {}
+    try {
+      $mediaApi->remove($id, "/{$path{0}}/{$path{1}}/{$path}.png");
+    }
+    catch (Exception $e) {}
   }
 
 }

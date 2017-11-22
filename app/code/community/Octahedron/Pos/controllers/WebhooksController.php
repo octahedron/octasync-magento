@@ -54,19 +54,19 @@ class Octahedron_Pos_WebhooksController extends Mage_Core_Controller_Front_Actio
 
   protected function addStockPicture($data) {
     $product = Mage::getModel('catalog/product')->loadByAttribute('sku', $data['stockNumber']);
-    if (!$product) throw new Exception('Invalid stock item', 500);
+    if (!$product) throw new Exception('Invalid stock item', 404);
     Mage::getSingleton('octahedron_pos/picture')->addStockPicture($product, $this->api->imageUris($data['path']));
   }
 
   protected function updateStockPicture($data) {
     $product = Mage::getModel('catalog/product')->loadByAttribute('sku', $data['stockNumber']);
-    if (!$product) throw new Exception('Invalid stock item', 500);
+    if (!$product) throw new Exception('Invalid stock item', 404);
     Mage::getSingleton('octahedron_pos/picture')->updateStockPicture($product, $data['path']);
   }
 
   protected function deleteStockPicture($data) {
     $product = Mage::getModel('catalog/product')->loadByAttribute('sku', $data['stockNumber']);
-    if (!$product) throw new Exception('Invalid stock item', 500);
+    if (!$product) throw new Exception('Invalid stock item', 404);
     Mage::getSingleton('octahedron_pos/picture')->deleteStockPicture($product, $data['path']);
   }
 
@@ -77,7 +77,7 @@ class Octahedron_Pos_WebhooksController extends Mage_Core_Controller_Front_Actio
     }
     $results = $this->api->stock(1, $stockNumber);
     $remoteStockDetails = array_pop($results['_embedded']['stock']);
-    if (!$remoteStockDetails) throw new Exception('Invalid stock item', 500);
+    if (!$remoteStockDetails) throw new Exception('Invalid stock item', 404);
 
     $localProduct = Mage::getModel('catalog/product')->loadByAttribute('sku', $stockNumber);
     if ($remoteStockDetails['is_in_stock']) {
@@ -93,19 +93,19 @@ class Octahedron_Pos_WebhooksController extends Mage_Core_Controller_Front_Actio
   protected function addStockItem($stockNumber) {
     $results = $this->api->stock(1, $stockNumber);
     $remoteStockDetails = array_pop($results['_embedded']['stock']);
-    if (!$remoteStockDetails) throw new Exception('Invalid stock item', 500);
+    if (!$remoteStockDetails) throw new Exception('Invalid stock item', 404);
     Mage::getSingleton('octahedron_pos/stock')->addStockItem($remoteStockDetails);
   }
 
   protected function deleteStockItem($stockNumber) {
     $product = Mage::getModel('catalog/product')->loadByAttribute('sku', $stockNumber);
-    if (!$product) throw new Exception('Invalid stock item', 500);
+    if (!$product) throw new Exception('Invalid stock item', 404);
     Mage::getSingleton('octahedron_pos/stock')->deleteStockItem($product);
   }
 
   protected function updateCategory($categoryDetails) {
     $category = Mage::getModel('catalog/category')->loadByAttribute('name', $categoryDetails['oldCategory']);
-    if (!$category) throw new Exception('Invalid category', 500);
+    if (!$category) throw new Exception('Invalid category', 404);
     Mage::getSingleton('octahedron_pos/category')->updateCategory($category, $categoryDetails['newCategory']);
   }
 
@@ -117,7 +117,7 @@ class Octahedron_Pos_WebhooksController extends Mage_Core_Controller_Front_Actio
 
   protected function mergeCategory($categoryDetails) {
     $category = Mage::getModel('catalog/category')->loadByAttribute('name', $categoryDetails['category']);
-    if (!$category) throw new Exception('Invalid category', 500);
+    if (!$category) throw new Exception('Invalid category', 404);
     Mage::getSingleton('octahedron_pos/category')->mergeCategory($category, $categoryDetails['mergedFrom']);
   }
 
